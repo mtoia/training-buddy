@@ -3,12 +3,11 @@
 Tutte le modifiche note per l’app *Training Buddy*.
 ---
 
-## [1.1.0] - In sviluppo
+## [1.1] - In sviluppo
 
 ### ✨ Nuove funzionalità
-- [ ] Gestione automatica della musica in riproduzione: la musica viene messa in pausa dura
-- [ ] Migliorato il supporto al background: l’allenamento prosegue anche quando lo schermo è bloccato o l’app è in background.
-- [ ] Modalità “silenziosa” (blocca tutti i suoni indipendentemente dall’opzione Suoni)
+- [X] Gestione automatica della musica in riproduzione: la musica viene messa in pausa dura
+- [X] Migliorato il supporto al background: l’allenamento prosegue anche quando lo schermo è bloccato o l’app è in background.
 - [ ] Supporto per lingua inglese (localizzazione)
 
 ### 🛠️ Miglioramenti
@@ -18,7 +17,7 @@ Tutte le modifiche note per l’app *Training Buddy*.
 
 ---
 
-## [1.0.0] - 2025-07-10
+## [1.0] - 2025-07-10
 
 ### ✅ Versione iniziale (TestFlight)
 - Conto alla rovescia per tempo di allenamento e riposo

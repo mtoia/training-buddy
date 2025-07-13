@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		293A42912E23B9AD00BE77CC /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 293A428F2E23B9A600BE77CC /* CHANGELOG.md */; };
+		293A42942E23B9BD00BE77CC /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 293A42922E23B9B200BE77CC /* README.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		298848852E20422D0079ACDE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,14 +29,29 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		293A428F2E23B9A600BE77CC /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
+		293A42922E23B9B200BE77CC /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		298848772E20422D0079ACDE /* TrainingBuddy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrainingBuddy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		298848842E20422D0079ACDE /* TrainingBuddyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrainingBuddyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2988488E2E20422D0079ACDE /* TrainingBuddyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrainingBuddyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		293A42A82E23D5EE00BE77CC /* Exceptions for "TrainingBuddy" folder in "TrainingBuddy" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 298848762E20422D0079ACDE /* TrainingBuddy */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		298848792E20422D0079ACDE /* TrainingBuddy */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				293A42A82E23D5EE00BE77CC /* Exceptions for "TrainingBuddy" folder in "TrainingBuddy" target */,
+			);
 			path = TrainingBuddy;
 			sourceTree = "<group>";
 		};
@@ -79,6 +99,8 @@
 				298848872E20422D0079ACDE /* TrainingBuddyTests */,
 				298848912E20422D0079ACDE /* TrainingBuddyUITests */,
 				298848782E20422D0079ACDE /* Products */,
+				293A428F2E23B9A600BE77CC /* CHANGELOG.md */,
+				293A42922E23B9B200BE77CC /* README.md */,
 			);
 			sourceTree = "<group>";
 		};
@@ -212,6 +234,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				293A42942E23B9BD00BE77CC /* README.md in Resources */,
+				293A42912E23B9AD00BE77CC /* CHANGELOG.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -321,6 +345,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/TrainingBuddy/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -378,6 +403,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/TrainingBuddy/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -399,6 +425,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "L'app usa l'accesso a Apple Music per mettere in pausa e riprendere l'audio in riproduzione.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -432,6 +459,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSAppleMusicUsageDescription = "L'app usa l'accesso a Apple Music per mettere in pausa e riprendere l'audio in riproduzione.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

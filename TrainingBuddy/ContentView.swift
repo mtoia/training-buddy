@@ -1,9 +1,10 @@
 import SwiftUI
 import AVFoundation
+import UIKit
 
 struct ContentView: View {
     @ObservedObject var settings = SettingsModel()
-    
+
     @State private var countdown: Int = 0
     @State private var timer: Timer? = nil
     @State private var motivationIndex = 0
@@ -11,10 +12,10 @@ struct ContentView: View {
     @State private var path: [String] = []
     @State private var pulse = false
     @State private var animatePhrase = false
-    @State private var audioPlayer: AVAudioPlayer?
     @State private var isPreCountdown = false
     @State private var preCountdownValue = 3
     @State private var preCountdownTimer: Timer? = nil
+    @State private var backgroundTask: UIBackgroundTaskIdentifier = .invalid
 
     let motivationalPhrases = [
         "Dai il massimo!",
@@ -28,17 +29,16 @@ struct ContentView: View {
         "La fatica è la tua forza!",
         "Vai come un treno!"
     ]
-    
+
     enum SessionPhase {
         case idle, workout, rest
     }
-    
+
     @State private var phase: SessionPhase = .idle
-    
+
     var body: some View {
         NavigationStack(path: $path) {
             VStack(spacing: 30) {
-                
                 if phase == .idle && !isPreCountdown {
                     Text("Training Buddy")
                         .font(.system(size: 34, weight: .bold, design: .rounded))
@@ -142,8 +142,9 @@ struct ContentView: View {
 
                             Spacer().frame(height: 40)
 
-                            Text("Riposo: \(countdown) secondi")
+                            Text("Riposo:\n\(countdown) secondi")
                                 .font(.system(size: 48, weight: .bold, design: .rounded))
+                                .multilineTextAlignment(.center)
 
                             Spacer()
 
@@ -158,8 +159,6 @@ struct ContentView: View {
             }
             .padding(.top, 40)
             .padding(.horizontal)
-            .navigationTitle("")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 if phase == .idle && !isPreCountdown {
                     ToolbarItem(placement: .navigationBarLeading) {
@@ -173,7 +172,6 @@ struct ContentView: View {
                         } label: {
                             Image(systemName: "line.3.horizontal")
                                 .imageScale(.large)
-                                .padding(.trailing, 8)
                         }
                     }
                 }
@@ -201,6 +199,8 @@ struct ContentView: View {
         isPreCountdown = false
         preCountdownTimer?.invalidate()
         phase = .idle
+        beginBackgroundTask()
+        endBackgroundTaskIfNeeded()
     }
 
     func startCountdown(for seconds: Int) {
@@ -212,12 +212,19 @@ struct ContentView: View {
         timer?.invalidate()
         motivationTimer?.invalidate()
 
+        // 🔄 Inizio del background task
+        backgroundTask = UIApplication.shared.beginBackgroundTask(withName: "WorkoutTimer") {
+            UIApplication.shared.endBackgroundTask(self.backgroundTask)
+            self.backgroundTask = .invalid
+        }
+
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { t in
             countdown -= 1
             if countdown <= 0 {
                 t.invalidate()
                 motivationTimer?.invalidate()
-                playSound(named: "workout_end")
+                SoundManager.shared.playSound(named: "workout_end")
+                self.endBackgroundTaskIfNeeded()
                 startRest()
             }
         }
@@ -226,6 +233,7 @@ struct ContentView: View {
             motivationIndex = (motivationIndex + 1) % motivationalPhrases.count
         }
     }
+
 
     func startRest() {
         phase = .rest
@@ -238,8 +246,8 @@ struct ContentView: View {
             countdown -= 1
             if countdown <= 0 {
                 t.invalidate()
-
-                // Suono rimosso: playSound(named: "rest_end")
+                SoundManager.shared.playSound(named: "rest_end")
+                self.endBackgroundTaskIfNeeded()
 
                 if settings.isLooping {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
@@ -252,31 +260,12 @@ struct ContentView: View {
         }
     }
 
-    func playSound(named soundName: String) {
-        guard settings.isSoundEnabled else { return }
-        guard let url = Bundle.main.url(forResource: soundName, withExtension: "wav") else {
-            print("❌ File audio \(soundName).wav non trovato")
-            return
-        }
-
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
-            try AVAudioSession.sharedInstance().setActive(true)
-
-            audioPlayer = try AVAudioPlayer(contentsOf: url)
-            audioPlayer?.prepareToPlay()
-            audioPlayer?.play()
-            print("✅ Suono \(soundName).wav riprodotto")
-        } catch {
-            print("❌ Errore suono: \(error.localizedDescription)")
-        }
-    }
 
     func startPreCountdown(fromLoop: Bool = false) {
         isPreCountdown = true
         preCountdownValue = 3
 
-        playSound(named: "start")
+        SoundManager.shared.playSound(named: "start")
 
         preCountdownTimer?.invalidate()
         preCountdownTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
@@ -287,6 +276,26 @@ struct ContentView: View {
                 isPreCountdown = false
                 startCountdown(for: Int(settings.workoutDuration))
             }
+        }
+    }
+    func beginBackgroundTask() {
+        backgroundTask = UIApplication.shared.beginBackgroundTask(withName: "WorkoutTimer") {
+            // Se il tempo scade e il sistema vuole sospendere, termina
+            UIApplication.shared.endBackgroundTask(self.backgroundTask)
+            self.backgroundTask = .invalid
+        }
+    }
+
+    func endBackgroundTask() {
+        if backgroundTask != .invalid {
+            UIApplication.shared.endBackgroundTask(backgroundTask)
+            backgroundTask = .invalid
+        }
+    }
+    func endBackgroundTaskIfNeeded() {
+        if backgroundTask != .invalid {
+            UIApplication.shared.endBackgroundTask(backgroundTask)
+            backgroundTask = .invalid
         }
     }
 }

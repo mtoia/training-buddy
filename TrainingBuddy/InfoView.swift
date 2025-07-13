@@ -9,7 +9,7 @@ struct InfoView: View {
             Text("by zteow")
                 .font(.system(size: 16, weight: .regular, design: .serif))
                 .italic()
-            Text("Versione 0.1")
+            Text("Versione 1,1")
                 .font(.system(size: 16, weight: .regular, design: .serif))
                 .italic()
             Text("") // Riga vuota
