@@ -3,7 +3,7 @@
 Tutte le modifiche note per l’app *Training Buddy*.
 ---
 
-## [1.2] - In sviluppo
+## [1.3] - In sviluppo
 
 ### ✨ Nuove funzionalità
 - [ ] Supporto per lingua inglese (localizzazione).
@@ -11,7 +11,12 @@ Tutte le modifiche note per l’app *Training Buddy*.
 ### 🛠️ Miglioramenti
 - [ ] Aggiornamento grafico.
 
+---
+
+## [1.2] - 2025-07-13
+
 ### 🐞 Bugfix
+- [X] Risolto un problema che impediva la visualizzazione del menu
 
 ---
 
@@ -23,8 +28,6 @@ Tutte le modifiche note per l’app *Training Buddy*.
 
 ### 🛠️ Miglioramenti
 - [X] Aggiornamento icone e asset minori.
-
-### 🐞 Bugfix
 
 ---
 

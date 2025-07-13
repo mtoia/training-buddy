@@ -99,6 +99,34 @@ struct ContentView: View {
 
                             Toggle("Suoni", isOn: $settings.isSoundEnabled)
                                 .padding(.horizontal)
+                                .toolbar {
+                                    if phase == .idle && !isPreCountdown {
+                                        ToolbarItem(placement: .navigationBarLeading) {
+                                            Menu {
+                                                Button("Impostazioni") {
+                                                    path.append("settings")
+                                                }
+                                                Button("Info su Training Buddy") {
+                                                    path.append("info")
+                                                }
+                                            } label: {
+                                                Image(systemName: "line.3.horizontal")
+                                                    .imageScale(.large)
+                                            }
+                                        }
+                                    }
+                                }
+                                .navigationDestination(for: String.self) { value in
+                                    switch value {
+                                    case "settings":
+                                        SettingsView(settings: settings)
+                                    case "info":
+                                        InfoView()
+                                    default:
+                                        EmptyView()
+                                    }
+                                }
+
 
                             Spacer()
                         }
