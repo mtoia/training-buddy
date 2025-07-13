@@ -1,15 +1,16 @@
-//
-//  TrainingBuddyApp.swift
-//  TrainingBuddy
-//
-//  Created by Matteo Toia on 10/07/25.
-//
-
 import SwiftUI
 import AVFoundation
+import UIKit
+
+    func application(_ application: UIApplication,
+                     supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        return .portrait
+    }
 
 @main
 struct TrainingBuddyApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+
     init() {
         configureAudioSession()
     }

@@ -65,11 +65,33 @@ struct ContentView: View {
                                 .font(.system(size: 28, weight: .semibold, design: .rounded))
                                 .multilineTextAlignment(.center)
 
-                            Button("Inizio") {
+                            Button(action: {
+                                provideHapticFeedback()
                                 startPreCountdown()
+                            }) {
+                                ZStack {
+                                    Circle()
+                                        .fill(Color.orange)
+                                        .frame(width: 100, height: 100)
+                                        .shadow(radius: 10)
+                                        .overlay(
+                                            Circle()
+                                                .stroke(Color.white.opacity(0.5), lineWidth: 4)
+                                        )
+
+                                    Text("VAI!")
+                                        .font(.system(size: 36, weight: .bold, design: .rounded))
+                                        .foregroundColor(.white)
+                                }
                             }
-                            .buttonStyle(CustomButtonStyle(bgColor: .orange))
-                            .padding(.top, 10)
+                            .buttonStyle(PlainButtonStyle())
+                            .scaleEffect(pulse ? 1.05 : 1.0)
+                            .animation(.easeInOut(duration: 1).repeatForever(autoreverses: true), value: pulse)
+                            .onAppear {
+                                if phase == .idle {
+                                    pulse = true
+                                }
+                            }
 
                             Toggle("Ciclo continuo", isOn: $settings.isLooping)
                                 .padding(.horizontal)
@@ -104,6 +126,7 @@ struct ContentView: View {
                             .animation(.easeInOut(duration: 1).repeatForever(autoreverses: true), value: animatePhrase)
                             .onAppear {
                                 animatePhrase = true
+                                pulse = true
                             }
 
                             Spacer().frame(height: 40)
@@ -113,11 +136,27 @@ struct ContentView: View {
 
                             Spacer()
 
-                            Button("Interrompi") {
+                            Button(action: {
+                                provideHapticFeedback()
                                 stopCountdown()
+                            }) {
+                                ZStack {
+                                    Circle()
+                                        .fill(Color.red)
+                                        .frame(width: 100, height: 100)
+                                        .shadow(radius: 10)
+                                        .overlay(
+                                            Circle()
+                                                .stroke(Color.white.opacity(0.5), lineWidth: 4)
+                                        )
+
+                                    Text("STOP")
+                                        .font(.system(size: 36, weight: .bold, design: .rounded))
+                                        .foregroundColor(.white)
+                                }
                             }
-                            .buttonStyle(CustomButtonStyle(bgColor: .red))
-                            .padding(.bottom, 30)
+                            .buttonStyle(PlainButtonStyle())
+                            .padding(.bottom, 60) // Sposto il bottone più in alto
                         }
 
                     case .rest:
@@ -148,44 +187,32 @@ struct ContentView: View {
 
                             Spacer()
 
-                            Button("Interrompi") {
+                            Button(action: {
                                 stopCountdown()
+                            }) {
+                                ZStack {
+                                    Circle()
+                                        .fill(Color.red)
+                                        .frame(width: 100, height: 100)
+                                        .shadow(radius: 10)
+                                        .overlay(
+                                            Circle()
+                                                .stroke(Color.white.opacity(0.5), lineWidth: 4)
+                                        )
+
+                                    Text("STOP")
+                                        .font(.system(size: 36, weight: .bold, design: .rounded))
+                                        .foregroundColor(.white)
+                                }
                             }
-                            .buttonStyle(CustomButtonStyle(bgColor: .red))
-                            .padding(.bottom, 30)
+                            .buttonStyle(PlainButtonStyle())
+                            .padding(.bottom, 60)
                         }
                     }
                 }
             }
             .padding(.top, 40)
             .padding(.horizontal)
-            .toolbar {
-                if phase == .idle && !isPreCountdown {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Menu {
-                            Button("Impostazioni") {
-                                path.append("settings")
-                            }
-                            Button("Info su Training Buddy") {
-                                path.append("info")
-                            }
-                        } label: {
-                            Image(systemName: "line.3.horizontal")
-                                .imageScale(.large)
-                        }
-                    }
-                }
-            }
-            .navigationDestination(for: String.self) { value in
-                switch value {
-                case "settings":
-                    SettingsView(settings: settings)
-                case "info":
-                    InfoView()
-                default:
-                    EmptyView()
-                }
-            }
         }
     }
 
@@ -212,7 +239,6 @@ struct ContentView: View {
         timer?.invalidate()
         motivationTimer?.invalidate()
 
-        // 🔄 Inizio del background task
         backgroundTask = UIApplication.shared.beginBackgroundTask(withName: "WorkoutTimer") {
             UIApplication.shared.endBackgroundTask(self.backgroundTask)
             self.backgroundTask = .invalid
@@ -234,10 +260,9 @@ struct ContentView: View {
         }
     }
 
-
     func startRest() {
         phase = .rest
-        pulse = false
+        pulse = true
         animatePhrase = false
         countdown = Int(settings.restDuration)
 
@@ -260,13 +285,11 @@ struct ContentView: View {
         }
     }
 
-
     func startPreCountdown(fromLoop: Bool = false) {
         isPreCountdown = true
         preCountdownValue = 3
-
+        pulse = false
         SoundManager.shared.playSound(named: "start")
-
         preCountdownTimer?.invalidate()
         preCountdownTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
             preCountdownValue -= 1
@@ -278,24 +301,23 @@ struct ContentView: View {
             }
         }
     }
+
     func beginBackgroundTask() {
         backgroundTask = UIApplication.shared.beginBackgroundTask(withName: "WorkoutTimer") {
-            // Se il tempo scade e il sistema vuole sospendere, termina
             UIApplication.shared.endBackgroundTask(self.backgroundTask)
             self.backgroundTask = .invalid
         }
     }
 
-    func endBackgroundTask() {
-        if backgroundTask != .invalid {
-            UIApplication.shared.endBackgroundTask(backgroundTask)
-            backgroundTask = .invalid
-        }
-    }
     func endBackgroundTaskIfNeeded() {
         if backgroundTask != .invalid {
             UIApplication.shared.endBackgroundTask(backgroundTask)
             backgroundTask = .invalid
         }
+    }
+
+    func provideHapticFeedback() {
+        let generator = UIImpactFeedbackGenerator(style: .medium)
+        generator.impactOccurred()
     }
 }
